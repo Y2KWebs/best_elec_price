@@ -27,8 +27,10 @@ def nivelar(precio,pocicion):
     precio_max_barato=50 #50 equivale a 0.005 kwh
     if precio<=precio_max_barato or pocicion<min_horas_baratas:
         requests.post("https://maker.ifttt.com/trigger/cheap_hour_starts/json/with/key/ro424fPne08N2QWP3w9P4")
+        print("HOOK: "+"https://maker.ifttt.com/trigger/cheap_hour_starts/json/with/key/ro424fPne08N2QWP3w9P4")
     else:
         requests.post("https://maker.ifttt.com/trigger/expensive_hour_starts/json/with/key/ro424fPne08N2QWP3w9P4")
+        print("HOOK: "+"https://maker.ifttt.com/trigger/expensive_hour_starts/json/with/key/ro424fPne08N2QWP3w9P4")
 
 
 def nivel_ahora():
