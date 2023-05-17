@@ -21,6 +21,7 @@ def fetch(date):
         precios = response.json()
         precios_por_hora=precios["included"][0]["attributes"]["values"]
         precios_por_hora.sort(key=lambda x: x['value'])
+        print(precios_por_hora)
         return precios_por_hora
     except requests.exceptions.HTTPError as errh:
         print ("HTTP Error:", errh)
@@ -32,6 +33,7 @@ def fetch(date):
         print ("Something went wrong:", err)
 
 def nivelar(precio, posicion):
+    print(precio,posicion)
     max_horas_baratas=4
     precio_max_barato=50
     precio_min_caro=150
@@ -44,14 +46,21 @@ def nivelar(precio, posicion):
     
 hora_actual = datetime.now().hour
 
+
 def niveles_ahora():
-    niveles = {}
-    precios_ordenados = fetch(str(date.today()))
-    precios_horas = [precio for precio in precios_ordenados if datetime.strptime(precio['datetime'], '%Y-%m-%dT%H:%M:%S.000+02:00').hour in [hora_actual + x for x in range(3)]]
+
+    niveles={}
+    precios_ordenados=fetch(date.today())
+    hora_actual=datetime.now().hour
     for x in range(3):
-        nivel = nivelar(precios_horas[x]['value'], x)
-        niveles[x] = nivel
-    return niveles  
+        posicion=0
+        for precio in precios_ordenados:
+            hora=datetime.strptime(precio['datetime'], '%Y-%m-%dT%H:%M:%S.000+02:00').hour
+            if hora_actual+x==hora:
+                niveles[x]=nivelar(precio['value'],posicion)
+            posicion+=1
+    return niveles
+
 
 niveles_luces = niveles_ahora()
 
